@@ -1,0 +1,16 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class SoundNotifier extends StateNotifier<bool> {
+  SoundNotifier() : super(true);
+
+  toggleSound() async {
+    state = !state;
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('sound', state);
+  }
+}
+
+final soundProvider = StateNotifierProvider<SoundNotifier, bool>(
+  (ref) => SoundNotifier(),
+);
