@@ -64,6 +64,7 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                 fontWeight: FontWeight.w700,
               ),
             ),
+
             Container(width: 50)
           ],
         ),

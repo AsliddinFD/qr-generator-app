@@ -13,9 +13,10 @@ class ScannedBarcode extends StatefulWidget {
   const ScannedBarcode({
     super.key,
     required this.qrcode,
+    required this.updateActiveScreen,
   });
   final QRCodeModel qrcode;
-
+  final void Function(int) updateActiveScreen;
   @override
   State<ScannedBarcode> createState() => _ScannedBarcodeState();
 }
@@ -33,11 +34,11 @@ class _ScannedBarcodeState extends State<ScannedBarcode> {
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
           // Ad is loaded
-          print('Ad loaded');
+          debugPrint('Ad loaded');
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
           // Ad failed to load
-          print('Ad failed to load: $error');
+          debugPrint('Ad failed to load: $error');
         },
       ),
     );
@@ -88,6 +89,9 @@ class _ScannedBarcodeState extends State<ScannedBarcode> {
             color: const Color((0xff3CB2E4)),
           ),
           GestureDetector(
+            onTap: () {
+              widget.updateActiveScreen(0);
+            },
             child: const Text(
               'Done',
               style: TextStyle(
@@ -127,9 +131,11 @@ class _ScannedBarcodeState extends State<ScannedBarcode> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      'Barcode',
-                      style: TextStyle(
+                    Text(
+                      widget.qrcode.type == Barcode.qrCode()
+                          ? 'Qr Code'
+                          : 'Barcode',
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF000000),
@@ -202,6 +208,7 @@ class _ScannedBarcodeState extends State<ScannedBarcode> {
                     MaterialPageRoute(
                       builder: (context) => ShowImage(
                         qr: widget.qrcode,
+                        updateActiveScreen: widget.updateActiveScreen,
                       ),
                     ),
                   );
@@ -209,8 +216,7 @@ class _ScannedBarcodeState extends State<ScannedBarcode> {
                 child: Row(
                   children: [
                     SvgPicture.asset(
-                      widget.qrcode.type != null &&
-                              widget.qrcode.type == Barcode.qrCode()
+                      widget.qrcode.type == Barcode.qrCode()
                           ? 'assets/qr_icon.svg'
                           : 'assets/barcode_icon.svg',
                       width: 24,

@@ -14,9 +14,10 @@ class ShowImage extends StatefulWidget {
   const ShowImage({
     super.key,
     required this.qr,
+    required this.updateActiveScreen,
   });
   final QRCodeModel qr;
-
+  final void Function(int) updateActiveScreen;
   @override
   State<ShowImage> createState() => _ShowImageState();
 }
@@ -92,6 +93,9 @@ class _ShowImageState extends State<ShowImage> {
         ),
         actions: [
           GestureDetector(
+            onTap: () {
+              widget.updateActiveScreen(0);
+            },
             child: const Text(
               'Done',
               style: TextStyle(
@@ -143,7 +147,7 @@ class _ShowImageState extends State<ShowImage> {
               ),
               padding: const EdgeInsets.only(left: 15),
               child: GestureDetector(
-                onTap: _isLoading ? null : shareImage,
+                onTap: shareImage,
                 child: const Row(
                   children: [
                     Icon(CupertinoIcons.share),

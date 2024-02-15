@@ -6,7 +6,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:frontend/models/qr_code.dart';
 import 'package:frontend/screens/scanned_qr_code.dart';
 import 'package:frontend/utils/functions.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart' as qr;
 import 'package:qr_scanner_overlay/qr_scanner_overlay.dart';
@@ -15,7 +14,12 @@ import 'package:vibration/vibration.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ScanScreen extends ConsumerStatefulWidget {
-  const ScanScreen({super.key});
+  const ScanScreen({
+    super.key,
+    required this.updateActiveScreen,
+  });
+
+  final void Function(int) updateActiveScreen;
 
   @override
   ConsumerState<ScanScreen> createState() => _ScanScreenState();
@@ -73,6 +77,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
           MaterialPageRoute(
             builder: (_) => ScannedBarcode(
               qrcode: qrcode,
+              updateActiveScreen: widget.updateActiveScreen,
             ),
           ),
         );
@@ -127,6 +132,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
           MaterialPageRoute(
             builder: (context) => ScannedBarcode(
               qrcode: qrcode,
+              updateActiveScreen: widget.updateActiveScreen,
             ),
           ),
         );

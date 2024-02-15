@@ -6,7 +6,11 @@ import 'package:frontend/screens/create_qr.dart';
 import 'package:frontend/widgets/toggle_bar.dart';
 
 class HistoryScreen extends ConsumerStatefulWidget {
-  const HistoryScreen({super.key});
+  const HistoryScreen({
+    super.key,
+    required this.updateActiveScreen,
+  });
+  final void Function(int) updateActiveScreen;
 
   @override
   ConsumerState<HistoryScreen> createState() => _HistoryScreenState();
@@ -30,12 +34,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             GestureDetector(
               onTap: () {
                 !ref.watch(bottomSheetProvider)
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CreateQrCode(),
-                        ),
-                      )
+                    ? widget.updateActiveScreen(1)
                     : null;
               },
               child: Text(
@@ -63,7 +62,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                     : ref.watch(bottomSheetProvider.notifier).toggleState();
               },
               child: Text(
-                !ref.watch(bottomSheetProvider)? 'Edit':'Done',
+                !ref.watch(bottomSheetProvider) ? 'Edit' : 'Done',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,

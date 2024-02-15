@@ -22,15 +22,23 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     });
   }
 
+  void updateActiveScreen(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget activeScreen = const CreateQrCode();
     if (currentIndex == 0) {
-      activeScreen = const ScanScreen();
+      activeScreen = ScanScreen(updateActiveScreen: updateActiveScreen,);
     } else if (currentIndex == 1) {
       activeScreen = const CreateQrCode();
     } else if (currentIndex == 2) {
-      activeScreen = const HistoryScreen();
+      activeScreen = HistoryScreen(
+        updateActiveScreen: updateActiveScreen,
+      );
     } else if (currentIndex == 3) {
       activeScreen = const SettingsScreen();
     }
