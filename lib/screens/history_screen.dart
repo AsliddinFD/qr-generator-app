@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/providers/bottom_sheet_provider.dart';
-import 'package:frontend/screens/create_qr.dart';
+import 'package:frontend/screens/add_qrcode_category.dart';
 import 'package:frontend/widgets/toggle_bar.dart';
 
 class HistoryScreen extends ConsumerStatefulWidget {
   const HistoryScreen({
     super.key,
-    required this.updateActiveScreen,
   });
-  final void Function(int) updateActiveScreen;
 
   @override
   ConsumerState<HistoryScreen> createState() => _HistoryScreenState();
@@ -34,7 +32,12 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             GestureDetector(
               onTap: () {
                 !ref.watch(bottomSheetProvider)
-                    ? widget.updateActiveScreen(1)
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AddQrCodeCategories(),
+                        ),
+                      )
                     : null;
               },
               child: Text(

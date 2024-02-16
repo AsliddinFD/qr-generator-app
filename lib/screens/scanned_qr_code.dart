@@ -13,10 +13,9 @@ class ScannedBarcode extends StatefulWidget {
   const ScannedBarcode({
     super.key,
     required this.qrcode,
-    required this.updateActiveScreen,
   });
   final QRCodeModel qrcode;
-  final void Function(int) updateActiveScreen;
+
   @override
   State<ScannedBarcode> createState() => _ScannedBarcodeState();
 }
@@ -90,7 +89,7 @@ class _ScannedBarcodeState extends State<ScannedBarcode> {
           ),
           GestureDetector(
             onTap: () {
-              widget.updateActiveScreen(0);
+              Navigator.pop(context);
             },
             child: const Text(
               'Done',
@@ -123,7 +122,7 @@ class _ScannedBarcodeState extends State<ScannedBarcode> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$category: $date',
+                      '${widget.qrcode.type} · $category: $date',
                       style: const TextStyle(
                         color: Color(0xFF787878),
                         fontSize: 14,
@@ -208,7 +207,6 @@ class _ScannedBarcodeState extends State<ScannedBarcode> {
                     MaterialPageRoute(
                       builder: (context) => ShowImage(
                         qr: widget.qrcode,
-                        updateActiveScreen: widget.updateActiveScreen,
                       ),
                     ),
                   );

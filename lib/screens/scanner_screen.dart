@@ -14,12 +14,7 @@ import 'package:vibration/vibration.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ScanScreen extends ConsumerStatefulWidget {
-  const ScanScreen({
-    super.key,
-    required this.updateActiveScreen,
-  });
-
-  final void Function(int) updateActiveScreen;
+  const ScanScreen({super.key});
 
   @override
   ConsumerState<ScanScreen> createState() => _ScanScreenState();
@@ -28,8 +23,8 @@ class ScanScreen extends ConsumerStatefulWidget {
 class _ScanScreenState extends ConsumerState<ScanScreen> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   late qr.QRViewController controller;
-  late bool sound;
-  late bool vibrate;
+  bool sound = true;
+  bool vibrate = true;
   bool isNavigating = false;
 
   @override
@@ -41,8 +36,8 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
   void getPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      sound = prefs.getBool('sound')!;
-      vibrate = prefs.getBool('vibrate')!;
+      sound = prefs.getBool('sound') ?? true;
+      vibrate = prefs.getBool('vibrate') ?? true;
     });
   }
 
@@ -58,13 +53,13 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
       source: ImageSource.gallery,
     );
     if (pickedFile != null && context.mounted) {
-      final File file = File(pickedFile.path!);
+      final File file = File(pickedFile.path);
       final call = flkit.FlMlKitScanningController();
       await call.setBarcodeFormat([flkit.BarcodeFormat.all]);
       final rest = await call.scanningImageByte(file.readAsBytesSync());
       final data = rest!.barcodes![0].value;
       final type = rest.barcodes![0].format;
-      if (rest != null && context.mounted) {
+      if (context.mounted) {
         final qrcode = QRCodeModel(
           data: data!,
           type: convertBarcode(null, type),
@@ -77,7 +72,6 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
           MaterialPageRoute(
             builder: (_) => ScannedBarcode(
               qrcode: qrcode,
-              updateActiveScreen: widget.updateActiveScreen,
             ),
           ),
         );
@@ -132,7 +126,6 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
           MaterialPageRoute(
             builder: (context) => ScannedBarcode(
               qrcode: qrcode,
-              updateActiveScreen: widget.updateActiveScreen,
             ),
           ),
         );

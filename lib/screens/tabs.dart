@@ -32,13 +32,11 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   Widget build(BuildContext context) {
     Widget activeScreen = const CreateQrCode();
     if (currentIndex == 0) {
-      activeScreen = ScanScreen(updateActiveScreen: updateActiveScreen,);
+      activeScreen = const ScanScreen();
     } else if (currentIndex == 1) {
       activeScreen = const CreateQrCode();
     } else if (currentIndex == 2) {
-      activeScreen = HistoryScreen(
-        updateActiveScreen: updateActiveScreen,
-      );
+      activeScreen = const HistoryScreen();
     } else if (currentIndex == 3) {
       activeScreen = const SettingsScreen();
     }

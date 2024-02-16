@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:frontend/models/qr_code.dart';
+
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -14,10 +15,9 @@ class ShowImage extends StatefulWidget {
   const ShowImage({
     super.key,
     required this.qr,
-    required this.updateActiveScreen,
   });
   final QRCodeModel qr;
-  final void Function(int) updateActiveScreen;
+
   @override
   State<ShowImage> createState() => _ShowImageState();
 }
@@ -25,7 +25,7 @@ class ShowImage extends StatefulWidget {
 class _ShowImageState extends State<ShowImage> {
   GlobalKey globalKey = GlobalKey();
   late BannerAd _bannerAd;
-  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -50,9 +50,6 @@ class _ShowImageState extends State<ShowImage> {
   }
 
   Future<void> shareImage() async {
-    setState(() {
-      _isLoading = true;
-    });
     try {
       RenderRepaintBoundary boundary =
           globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
@@ -69,9 +66,6 @@ class _ShowImageState extends State<ShowImage> {
         [file.path],
         text: 'Check out my QR code!',
       );
-      setState(() {
-        _isLoading = false;
-      });
     } catch (e) {
       print('Error sharing image: $e');
     }
@@ -94,7 +88,7 @@ class _ShowImageState extends State<ShowImage> {
         actions: [
           GestureDetector(
             onTap: () {
-              widget.updateActiveScreen(0);
+              Navigator.pop(context);
             },
             child: const Text(
               'Done',
@@ -114,27 +108,27 @@ class _ShowImageState extends State<ShowImage> {
         padding: const EdgeInsets.all(15),
         child: Column(
           children: [
-            Container(
-              width: 398,
-              height: 272,
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFFFFF),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              padding: const EdgeInsets.all(15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  RepaintBoundary(
-                    key: globalKey,
-                    child: BarcodeWidget(
+            RepaintBoundary(
+              key: globalKey,
+              child: Container(
+                width: 398,
+                height: 272,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: const EdgeInsets.all(15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    BarcodeWidget(
                       data: widget.qr.data,
                       barcode: widget.qr.type,
                       width: 236,
                       height: 142,
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 35),
