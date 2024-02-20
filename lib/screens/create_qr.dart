@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/buy_premium.dart';
 import 'package:frontend/widgets/qr_code_card.dart';
 import 'package:frontend/data/created_qr_codes.dart';
 import 'package:frontend/screens/add_qrcode_category.dart';
@@ -22,10 +23,10 @@ class _CreateQrCodeState extends State<CreateQrCode> {
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
-          print('Ad loaded');
+          debugPrint('Ad loaded');
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('Ad failed to load: $error');
+          debugPrint('Ad failed to load: $error');
         },
       ),
     );
@@ -64,15 +65,27 @@ class _CreateQrCodeState extends State<CreateQrCode> {
                 fontWeight: FontWeight.w700,
               ),
             ),
-
             Container(width: 50)
           ],
         ),
         bottom: PreferredSize(
-          preferredSize: Size(MediaQuery.of(context).size.width, 120),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: Image.asset('assets/premium_banner.png'),
+          preferredSize: Size(
+            MediaQuery.of(context).size.width,
+            120,
+          ),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const BuyPremium(),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: Image.asset('assets/premium_banner.png'),
+            ),
           ),
         ),
       ),

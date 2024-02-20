@@ -8,6 +8,7 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ScannedBarcode extends StatefulWidget {
   const ScannedBarcode({
@@ -53,12 +54,21 @@ class _ScannedBarcodeState extends State<ScannedBarcode> {
     final category = widget.qrcode.category;
 
     void navigateToWebsite(String searchData) async {
-      String encodedSearchData = Uri.encodeComponent(searchData);
-      var url = Uri.parse('https://www.google.com/search?q=$encodedSearchData');
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url);
+      // Regular expression to check if it's a valid URL
+      RegExp urlRegex = RegExp(
+        r'^(http|https):\/\/[^\s$.?#].[^\s]*$',
+        caseSensitive: false,
+        multiLine: false,
+      );
+
+      if (urlRegex.hasMatch(searchData)) {
+        // If it matches the URL pattern, launch it directly
+        await launchUrlString(searchData);
       } else {
-        throw 'Could not launch $url';
+        // Handle other cases or treat it as a search query for a search engine
+        String searchQueryUrl =
+            "https://www.google.com/search?q=${Uri.encodeComponent(searchData)}";
+        await launchUrlString(searchQueryUrl);
       }
     }
 
@@ -122,7 +132,7 @@ class _ScannedBarcodeState extends State<ScannedBarcode> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${widget.qrcode.type} · $category: $date',
+                      '${widget.qrcode.type.name} · $category: $date',
                       style: const TextStyle(
                         color: Color(0xFF787878),
                         fontSize: 14,

@@ -2,13 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PremiumBanner extends StatelessWidget {
-  const PremiumBanner({super.key});
+  const PremiumBanner({
+    super.key,
+    required this.height,
+  });
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 430,
-      height: 313,
+      height: height,
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage(

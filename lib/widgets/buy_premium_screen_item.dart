@@ -18,12 +18,16 @@ class PremiumScreenItem extends StatelessWidget {
             children: [
               SvgPicture.asset('assets/premium_item.svg'),
               const SizedBox(width: 10),
-              Text(
-                text,
-                style: const TextStyle(
-                  color: Color(0xFF000000),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
+              Flexible(
+                child: Text(
+                  text,
+                  maxLines: 2,
+                  softWrap: true,
+                  style: const TextStyle(
+                    color: Color(0xFF000000),
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
                 ),
               )
             ],

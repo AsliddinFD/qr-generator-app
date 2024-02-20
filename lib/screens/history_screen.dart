@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frontend/providers/bottom_sheet_provider.dart';
 import 'package:frontend/screens/add_qrcode_category.dart';
+import 'package:frontend/screens/buy_premium.dart';
 import 'package:frontend/widgets/toggle_bar.dart';
 
 class HistoryScreen extends ConsumerStatefulWidget {
@@ -77,9 +78,19 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         ),
         bottom: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).size.width, 120),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: Image.asset('assets/premium_banner.png'),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const BuyPremium(),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: Image.asset('assets/premium_banner.png'),
+            ),
           ),
         ),
       ),

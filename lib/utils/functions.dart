@@ -9,60 +9,51 @@ import 'package:fl_mlkit_scanning/fl_mlkit_scanning.dart' as flkit;
 import 'package:qr_code_scanner/qr_code_scanner.dart' as qr;
 
 void showModal(category, context) {
-  if (category['premium'] == true) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const BuyPremium(),
+  if (category['name'].contains('WIFI')) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      useSafeArea: true,
+      clipBehavior: Clip.hardEdge,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      context: context,
+      builder: (context) => WifiQrCodeGenerator(
+        category: category,
+      ),
+    );
+  } else if (category['name'].contains('Card')) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      useSafeArea: true,
+      clipBehavior: Clip.hardEdge,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      context: context,
+      builder: (context) => VcardQrGenerator(
+        category: category,
       ),
     );
   } else {
-    if (category['name'].contains('WIFI')) {
-      showModalBottomSheet(
-        isScrollControlled: true,
-        useSafeArea: true,
-        clipBehavior: Clip.hardEdge,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(25.0),
-          ),
+    showModalBottomSheet(
+      isScrollControlled: true,
+      useSafeArea: true,
+      clipBehavior: Clip.hardEdge,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
         ),
-        context: context,
-        builder: (context) => WifiQrCodeGenerator(
-          category: category,
-        ),
-      );
-    } else if (category['name'].contains('Card')) {
-      showModalBottomSheet(
-        isScrollControlled: true,
-        useSafeArea: true,
-        clipBehavior: Clip.hardEdge,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(25.0),
-          ),
-        ),
-        context: context,
-        builder: (context) => VcardQrGenerator(
-          category: category,
-        ),
-      );
-    } else {
-      showModalBottomSheet(
-        isScrollControlled: true,
-        useSafeArea: true,
-        clipBehavior: Clip.hardEdge,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(25.0),
-          ),
-        ),
-        context: context,
-        builder: (context) => QrGenerator(
-          category: category,
-        ),
-      );
-    }
+      ),
+      context: context,
+      builder: (context) => QrGenerator(
+        category: category,
+      ),
+    );
   }
 }
 

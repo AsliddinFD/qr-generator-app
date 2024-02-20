@@ -15,7 +15,7 @@ class TabsScreen extends ConsumerStatefulWidget {
 }
 
 class _TabsScreenState extends ConsumerState<TabsScreen> {
-  int currentIndex = 0;
+  int currentIndex = 1;
   void selectTab(int index) {
     setState(() {
       currentIndex = index;

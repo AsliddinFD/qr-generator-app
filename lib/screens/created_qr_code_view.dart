@@ -5,6 +5,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:frontend/screens/add_qrcode_category.dart';
+import 'package:frontend/screens/buy_premium.dart';
+import 'package:frontend/screens/create_qr.dart';
+import 'package:frontend/screens/tabs.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,6 +18,7 @@ class QRCodeView extends StatefulWidget {
     super.key,
     required this.data,
   });
+
   final String data;
   @override
   State<QRCodeView> createState() => _QRCodeViewState();
@@ -35,8 +40,8 @@ class _QRCodeViewState extends State<QRCodeView> {
       final file = await File('${tempDir.path}/QR_Code.png').create();
       await file.writeAsBytes(pngBytes);
 
-      await Share.shareFiles(
-        [file.path],
+      await Share.shareXFiles(
+        [XFile(file.path)],
         text: 'Check out my QR code!',
       );
     } catch (e) {
@@ -59,7 +64,15 @@ class _QRCodeViewState extends State<QRCodeView> {
         ),
         actions: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TabsScreen(),
+                ),
+                ModalRoute.withName("/Home"),
+              );
+            },
             child: const Text(
               'Done',
               style: TextStyle(
@@ -93,6 +106,7 @@ class _QRCodeViewState extends State<QRCodeView> {
                       padding: const EdgeInsets.all(30),
                       child: QrImageView(
                         data: widget.data,
+                        gapless: false,
                       ),
                     ),
                   ),
@@ -104,35 +118,45 @@ class _QRCodeViewState extends State<QRCodeView> {
                       color: const Color(0xFF3CB2E4),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: 22,
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 25),
-                              SvgPicture.asset('assets/edit_style_icon.svg'),
-                              const SizedBox(width: 15),
-                              const Text(
-                                'Change style',
-                                style: TextStyle(
-                                  color: Color(0xFFFFFFFF),
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              )
-                            ],
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const BuyPremium(),
                           ),
-                        ),
-                        Positioned(
-                          top: 16,
-                          left: 180,
-                          child: Transform.rotate(
-                            angle: 25 * 3.141592653589793 / 180,
-                            child: Image.asset('assets/premium_icon.png'),
+                        );
+                      },
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 22,
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 25),
+                                SvgPicture.asset('assets/edit_style_icon.svg'),
+                                const SizedBox(width: 15),
+                                const Text(
+                                  'Change style',
+                                  style: TextStyle(
+                                    color: Color(0xFFFFFFFF),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        )
-                      ],
+                          Positioned(
+                            top: 16,
+                            left: 180,
+                            child: Transform.rotate(
+                              angle: 25 * 3.141592653589793 / 180,
+                              child: Image.asset('assets/premium_icon.png'),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 25),

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:fl_mlkit_scanning/fl_mlkit_scanning.dart' as flkit;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -57,9 +58,13 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
       final call = flkit.FlMlKitScanningController();
       await call.setBarcodeFormat([flkit.BarcodeFormat.all]);
       final rest = await call.scanningImageByte(file.readAsBytesSync());
-      final data = rest!.barcodes![0].value;
-      final type = rest.barcodes![0].format;
+      final lengthOfBarcodes = rest!.barcodes!.length;
+      if (lengthOfBarcodes == 0) {
+        showMessage();
+      }
       if (context.mounted) {
+        final data = rest.barcodes![0].value;
+        final type = rest.barcodes![0].format;
         final qrcode = QRCodeModel(
           data: data!,
           type: convertBarcode(null, type),
@@ -76,6 +81,41 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
           ),
         );
       }
+    }
+  }
+
+  void showMessage() {
+    if (Platform.isAndroid) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: const Text('No barcode was detected'),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Okay'),
+            )
+          ],
+        ),
+      );
+    } else if (Platform.isIOS) {
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          content: const Text('No barcode was detected'),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(surfaceTintColor: Colors.transparent),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Okay'),
+            ),
+          ],
+        ),
+      );
     }
   }
 

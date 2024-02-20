@@ -43,9 +43,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         bottom: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).size.width, 120),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: Image.asset('assets/premium_banner.png'),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const BuyPremium(),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: Image.asset('assets/premium_banner.png'),
+            ),
           ),
         ),
       ),

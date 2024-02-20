@@ -62,12 +62,12 @@ class _ShowImageState extends State<ShowImage> {
       final file = await File('${tempDir.path}/QR_Code.png').create();
       await file.writeAsBytes(pngBytes);
 
-      await Share.shareFiles(
-        [file.path],
+      await Share.shareXFiles(
+        [XFile(file.path)],
         text: 'Check out my QR code!',
       );
     } catch (e) {
-      print('Error sharing image: $e');
+      debugPrint('Error sharing image: $e');
     }
   }
 

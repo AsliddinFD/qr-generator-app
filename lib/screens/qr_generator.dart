@@ -5,8 +5,12 @@ import 'package:frontend/utils/functions.dart';
 import 'package:frontend/widgets/category_card.dart';
 
 class QrGenerator extends StatefulWidget {
-  const QrGenerator({super.key, required this.category});
+  const QrGenerator({
+    super.key,
+    required this.category,
+  });
   final Map<String, dynamic> category;
+
   @override
   State<QrGenerator> createState() => _QrGeneratorState();
 }
